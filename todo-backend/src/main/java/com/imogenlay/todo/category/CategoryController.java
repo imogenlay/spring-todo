@@ -2,9 +2,8 @@ package com.imogenlay.todo.category;
 
 import java.util.List;
 
-import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Sort;
-import org.springframework.boot.context.properties.bind.validation.ValidationErrors;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,11 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.imogenlay.todo.category.dtos.CategoryQueryParams;
 import com.imogenlay.todo.category.dtos.CategoryResponse;
 import com.imogenlay.todo.category.dtos.CreateCategoryDto;
-import com.imogenlay.todo.common.Either;
 import com.imogenlay.todo.common.SortOrder;
 import com.imogenlay.todo.common.error.ConditionalObject;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController()
 @RequestMapping("/categories")
@@ -43,7 +43,7 @@ public class CategoryController {
             "name"
         );
 
-        return ResponseEntity.ok(categoryService.findAll(sort));
+        return ResponseEntity.status(HttpStatus.OK).body(categoryService.findAll(sort));
     }
   
     @PostMapping()
@@ -52,6 +52,15 @@ public class CategoryController {
         if (result.hasError())
             result.throwError(); 
 
-        return ResponseEntity.status(201).body(result.getObject());
+        return ResponseEntity.status(HttpStatus.CREATED).body(result.getObject()); 
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryResponse> update(@PathVariable Long id, @Valid @RequestBody CreateCategoryDto data) { 
+        ConditionalObject<CategoryResponse> result = this.categoryService.update(id, data);
+        if (result.hasError())
+            result.throwError(); 
+
+        return ResponseEntity.status(HttpStatus.OK).body(result.getObject());
     }
 }

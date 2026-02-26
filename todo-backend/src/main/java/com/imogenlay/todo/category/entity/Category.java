@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.imogenlay.todo.category.dtos.CategoryResponse;
 import com.imogenlay.todo.common.entity.BaseEntity;
+import com.imogenlay.todo.common.entity.ITimestampable;
 import com.imogenlay.todo.common.entity.TimestampedEntityListener;
 
 import jakarta.persistence.Entity;
@@ -13,9 +14,11 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "categories")
 @EntityListeners(TimestampedEntityListener.class)
-public class Category extends BaseEntity {
+public class Category extends BaseEntity implements ITimestampable {
     
     private String name;
+    private Short hue;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -24,6 +27,9 @@ public class Category extends BaseEntity {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
+    public Short getHue() { return hue; }
+    public void setHue(Short hue) { this.hue = hue; }
+
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
@@ -31,6 +37,6 @@ public class Category extends BaseEntity {
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
     public CategoryResponse createResponse() {
-        return new CategoryResponse(getId(), getName());
+        return new CategoryResponse(getId(), getName(), getHue());
     }
 }
