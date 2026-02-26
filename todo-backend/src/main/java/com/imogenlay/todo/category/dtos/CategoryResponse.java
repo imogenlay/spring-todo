@@ -1,3 +1,3 @@
 package com.imogenlay.todo.category.dtos;
 
-public record CategoryResponse(Long id, String name, Short hue) { }
+public record CategoryResponse(Long id, String name, Integer hue) { }

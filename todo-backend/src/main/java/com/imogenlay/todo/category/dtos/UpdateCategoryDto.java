@@ -1,19 +1,14 @@
 package com.imogenlay.todo.category.dtos;
- 
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record CreateCategoryDto(
-    @NotBlank(message = "Name must not be blank")
-    @Size(min = 2, message = "Name must be longer than 1 characters")
+public record UpdateCategoryDto(
+    @Size(min = 2, message = "Name must be longer than 1 character")
     String name,
-    
-    @NotNull(message = "Hue is required")
+
     @Min(value = 0, message = "Hue must be at least 0")
     @Max(value = 360, message = "Hue must be at most 360")
     Integer hue
-
 ) { }

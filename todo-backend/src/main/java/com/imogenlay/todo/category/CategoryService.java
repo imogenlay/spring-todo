@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.imogenlay.todo.category.dtos.CategoryResponse;
 import com.imogenlay.todo.category.dtos.CreateCategoryDto;
+import com.imogenlay.todo.category.dtos.UpdateCategoryDto;
 import com.imogenlay.todo.category.entity.Category;
 import com.imogenlay.todo.common.error.ConditionalObject; 
 
@@ -31,7 +32,7 @@ public class CategoryService {
         String name = normaliseName(data.name());
         List<Category> categories = this.categoryRepository.findDistinctWithNamesIgnoreCase(List.of(name));
         if (!categories.isEmpty())
-            return new ConditionalObject<>(HttpStatus.BAD_REQUEST, "Category already exists.");
+            return new ConditionalObject<>(HttpStatus.BAD_REQUEST, "Category '" + name + "' already exists.");
 
         Category category = new Category();
         category.setName(name);
@@ -40,17 +41,28 @@ public class CategoryService {
         return new ConditionalObject<>(category.createResponse());
     }
     
-    public ConditionalObject<CategoryResponse> update(Long id, CreateCategoryDto data) { 
+    public ConditionalObject<CategoryResponse> update(Long id, UpdateCategoryDto data) { 
         Optional<Category> optional = this.categoryRepository.findById(id);
         if (optional.isEmpty())
             return new ConditionalObject<>(HttpStatus.NOT_FOUND, "Category with ID [" + id + "] does not exist.");
 
         Category category = optional.get();
-        category.setName(normaliseName(data.name()));
-        category.setHue(data.hue());
+        if (data.name() != null)
+            category.setName(normaliseName(data.name()));
+        if (data.hue() != null)
+            category.setHue(data.hue());
         categoryRepository.save(category);
  
         return new ConditionalObject<>(category.createResponse());
+    }
+
+    public ConditionalObject<Void> delete(Long id) {
+        Optional<Category> optional = this.categoryRepository.findById(id);
+        if (optional.isEmpty())
+            return new ConditionalObject<>(HttpStatus.NOT_FOUND, "Category with ID [" + id + "] does not exist.");
+        this.categoryRepository.delete(optional.get()); 
+
+        return new ConditionalObject<>(null);
     }
 
     private String normaliseName(String name) {

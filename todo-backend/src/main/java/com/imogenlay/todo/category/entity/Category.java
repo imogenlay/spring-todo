@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 public class Category extends BaseEntity implements ITimestampable {
     
     private String name;
-    private Short hue;
+    private Integer hue;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -27,8 +27,8 @@ public class Category extends BaseEntity implements ITimestampable {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public Short getHue() { return hue; }
-    public void setHue(Short hue) { this.hue = hue; }
+    public Integer getHue() { return hue; }
+    public void setHue(Integer hue) { this.hue = hue; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

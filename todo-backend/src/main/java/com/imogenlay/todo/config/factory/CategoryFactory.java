@@ -19,8 +19,8 @@ public class CategoryFactory {
     public Category create(CategoryFactoryOptions options) {
         Category category = new Category();
         Faker faker = new Faker();
-        category.setName(options.name != null ? options.name : faker.animal().name()); 
-        category.setHue(options.hue != null ? options.hue : (short)(Math.random() * 360f)); 
+        category.setName((options.name != null ? options.name : faker.animal().name()).toLowerCase()); 
+        category.setHue(options.hue != null ? options.hue : (int)(Math.random() * 360f)); 
         return category;
     }
 
@@ -42,8 +42,8 @@ public class CategoryFactory {
         return categoryRepository.save(recording);
     }
 
-    @Override
+    /*@Override
     public void clear() {
         this.categoryRepository.deleteAll(); 
-    }
+    }*/
 }

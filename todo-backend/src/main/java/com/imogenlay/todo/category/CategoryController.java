@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.imogenlay.todo.category.dtos.CategoryQueryParams;
 import com.imogenlay.todo.category.dtos.CategoryResponse;
 import com.imogenlay.todo.category.dtos.CreateCategoryDto;
+import com.imogenlay.todo.category.dtos.UpdateCategoryDto;
 import com.imogenlay.todo.common.SortOrder;
 import com.imogenlay.todo.common.error.ConditionalObject;
 
@@ -56,11 +58,24 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryResponse> update(@PathVariable Long id, @Valid @RequestBody CreateCategoryDto data) { 
+    public ResponseEntity<CategoryResponse> update(
+        @PathVariable Long id,
+        @Valid @RequestBody UpdateCategoryDto data)
+    { 
         ConditionalObject<CategoryResponse> result = this.categoryService.update(id, data);
         if (result.hasError())
             result.throwError(); 
 
         return ResponseEntity.status(HttpStatus.OK).body(result.getObject());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id)
+    { 
+        ConditionalObject<Void> result = this.categoryService.delete(id);
+        if (result.hasError())
+            result.throwError();
+        
+        return ResponseEntity.noContent().build();
     }
 }
