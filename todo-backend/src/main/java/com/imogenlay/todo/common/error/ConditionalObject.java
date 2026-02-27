@@ -16,6 +16,11 @@ public class ConditionalObject<T> {
     public ConditionalObject(HttpStatus status, String message) { 
         this.object = null;
         this.error = new Tuple<HttpStatus, String>(status, message);
+    }
+    
+    public ConditionalObject(ConditionalObject<?> obj) { 
+        this.object = null;
+        this.error = new Tuple<HttpStatus, String>(obj.error.getA(), obj.error.getB());
     }    
 
     public T getObject() { return object; }
@@ -30,13 +35,15 @@ public class ConditionalObject<T> {
             return;
 
         HttpStatus status = getErrorStatus();
-        if (status == HttpStatus.BAD_REQUEST)
-            throw new BadRequestException(getErrorMessage());
-        if (status == HttpStatus.NOT_FOUND)
-            throw new NotFoundException(getErrorMessage());
-        if (status == HttpStatus.INTERNAL_SERVER_ERROR)
-            throw new InternalServerException(getErrorMessage());
-        
-        throw new RuntimeException("Error was not recognised: " + getErrorMessage());
+        switch (status) {
+            case BAD_REQUEST: 
+                throw new BadRequestException(getErrorMessage());                 
+            case NOT_FOUND: 
+                throw new NotFoundException(getErrorMessage());
+            case INTERNAL_SERVER_ERROR: 
+                throw new InternalServerException(getErrorMessage());        
+            default:
+                throw new RuntimeException("Error was not recognised: " + getErrorMessage());
+        } 
     }
 }

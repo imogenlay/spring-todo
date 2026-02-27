@@ -28,9 +28,17 @@ public class CategoryService {
             .stream().map((c) -> c.createResponse()).toList();
     }
     
+    public ConditionalObject<Category> findById(Long id) {
+        Optional<Category> result = categoryRepository.findById(id);
+        if (result.isEmpty())
+            return new ConditionalObject<>(HttpStatus.NOT_FOUND, "Category with ID [" + id + "] does not exist.");
+
+        return new ConditionalObject<>(result.get());
+    }
+
     public ConditionalObject<CategoryResponse> create(CreateCategoryDto data) {
         String name = normaliseName(data.name());
-        List<Category> categories = this.categoryRepository.findDistinctWithNamesIgnoreCase(List.of(name));
+        List<Category> categories = categoryRepository.findDistinctWithNamesIgnoreCase(List.of(name));
         if (!categories.isEmpty())
             return new ConditionalObject<>(HttpStatus.BAD_REQUEST, "Category '" + name + "' already exists.");
 
@@ -42,11 +50,11 @@ public class CategoryService {
     }
     
     public ConditionalObject<CategoryResponse> update(Long id, UpdateCategoryDto data) { 
-        Optional<Category> optional = this.categoryRepository.findById(id);
-        if (optional.isEmpty())
-            return new ConditionalObject<>(HttpStatus.NOT_FOUND, "Category with ID [" + id + "] does not exist.");
+        ConditionalObject<Category> result = findById(id);
+        if (result.hasError())
+            return new ConditionalObject<>(result);
 
-        Category category = optional.get();
+        Category category = result.getObject();
         if (data.name() != null)
             category.setName(normaliseName(data.name()));
         if (data.hue() != null)
@@ -57,10 +65,10 @@ public class CategoryService {
     }
 
     public ConditionalObject<Void> delete(Long id) {
-        Optional<Category> optional = this.categoryRepository.findById(id);
-        if (optional.isEmpty())
-            return new ConditionalObject<>(HttpStatus.NOT_FOUND, "Category with ID [" + id + "] does not exist.");
-        this.categoryRepository.delete(optional.get()); 
+        ConditionalObject<Category> result = findById(id);
+        if (result.hasError())
+            return new ConditionalObject<>(result);
+        categoryRepository.delete(result.getObject()); 
 
         return new ConditionalObject<>(null);
     }

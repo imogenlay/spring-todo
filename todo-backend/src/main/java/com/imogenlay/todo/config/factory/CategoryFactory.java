@@ -16,6 +16,10 @@ public class CategoryFactory {
         this.categoryRepository = categoryRepository;
     }
 
+    public boolean repoEmpty() {
+        return categoryRepository.count() == 0;
+    }
+    
     public Category create(CategoryFactoryOptions options) {
         Category category = new Category();
         Faker faker = new Faker();
@@ -24,22 +28,18 @@ public class CategoryFactory {
         return category;
     }
 
-    public boolean repoEmpty() {
-        return categoryRepository.count() == 0;
-    }
-    
     public Category create() {
         return create(new CategoryFactoryOptions());
     }
 
     public Category createAndPersist(CategoryFactoryOptions options) {
-        Category recording = create(options);
-        return categoryRepository.save(recording);
+        Category category = create(options);
+        return categoryRepository.save(category);
     }
 
     public Category createAndPersist() {
-        Category recording = create();
-        return categoryRepository.save(recording);
+        Category category = create();
+        return categoryRepository.save(category);
     }
 
     /*@Override

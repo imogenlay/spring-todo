@@ -6,15 +6,18 @@ import org.springframework.stereotype.Component;
 
 import com.imogenlay.todo.config.factory.CategoryFactory;
 import com.imogenlay.todo.config.factory.CategoryFactoryOptions;
+import com.imogenlay.todo.config.factory.TaskFactory; 
 
 @Component()
 @Profile("dev")
 public class DataSeeder implements CommandLineRunner {
     
     private final CategoryFactory categoryFactory;
+    private final TaskFactory taskFactory;
 
-    public DataSeeder(CategoryFactory categoryFactory) {
+    public DataSeeder(CategoryFactory categoryFactory, TaskFactory taskFactory) {
         this.categoryFactory = categoryFactory;
+        this.taskFactory = taskFactory;
     }
 
     @Override
@@ -47,6 +50,12 @@ public class DataSeeder implements CommandLineRunner {
                 new CategoryFactoryOptions()
                     .name("Cleaning")
                     .hue(310));
+        }
+
+        System.out.println("SEED NEW TASKS");
+        if (taskFactory.repoEmpty()) {
+            for (int i = 0; i < 80; i++) 
+                taskFactory.createAndPersist();
         }
     }
 }
