@@ -17,4 +17,17 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     """)
     List<Category> findDistinctWithNamesIgnoreCase(
         @Param("names") List<String> names);
+
+        
+    @Query("""
+        SELECT COALESCE(MIN(c.id), 0)
+        FROM Category c
+    """)
+    Long getMinId();
+
+    @Query("""
+        SELECT COALESCE(MAX(c.id), 0)
+        FROM Category c
+    """)
+    Long getMaxId();
 }

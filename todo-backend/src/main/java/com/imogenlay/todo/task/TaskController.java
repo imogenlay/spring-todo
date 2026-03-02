@@ -73,7 +73,7 @@ public class TaskController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id)
     { 
-        ConditionalObject<Void> result = taskService.delete(id);
+        ConditionalObject<TaskResponse> result = taskService.delete(id);
         if (result.hasError())
             result.throwError();
         

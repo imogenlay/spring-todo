@@ -1,6 +1,6 @@
 package com.imogenlay.todo.category;
 
-import java.util.List;
+import java.util.List; 
 
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -17,6 +17,7 @@ import com.imogenlay.todo.category.dtos.CategoryQueryParams;
 import com.imogenlay.todo.category.dtos.CategoryResponse;
 import com.imogenlay.todo.category.dtos.CreateCategoryDto;
 import com.imogenlay.todo.category.dtos.UpdateCategoryDto;
+import com.imogenlay.todo.category.entity.Category;
 import com.imogenlay.todo.common.SortOrder;
 import com.imogenlay.todo.common.error.ConditionalObject;
 
@@ -72,7 +73,7 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id)
     { 
-        ConditionalObject<Void> result = this.categoryService.delete(id);
+        ConditionalObject<Category> result = this.categoryService.delete(id);
         if (result.hasError())
             result.throwError();
         

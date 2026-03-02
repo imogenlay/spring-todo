@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
- 
-import com.imogenlay.todo.category.CategoryService; 
+
+import com.imogenlay.todo.category.CategoryAccessHandler; 
 import com.imogenlay.todo.category.entity.Category;
 import com.imogenlay.todo.common.error.ConditionalObject;
 import com.imogenlay.todo.task.dtos.CreateTaskDto;
@@ -18,28 +18,20 @@ import com.imogenlay.todo.task.entity.Task;
 @Service
 public class TaskService {
     
-    private final TaskRepository taskRepository;
-    private final CategoryService categoryService;
+    private final TaskAccessHandler taskAccessHandler;
+    private final CategoryAccessHandler categoryAccessHandler;
 
-    public TaskService(TaskRepository taskRepository, CategoryService categoryService) {
-        this.taskRepository = taskRepository;
-        this.categoryService = categoryService;
+    public TaskService(CategoryAccessHandler categoryAccessHandler, TaskAccessHandler taskAccessHandler) {
+        this.taskAccessHandler = taskAccessHandler; 
+        this.categoryAccessHandler = categoryAccessHandler; 
     }
 
     public List<TaskResponse> findAll(List<String> categories, Sort sort) {
-        List<Task> tasks;
-        if (categories == null || categories.isEmpty())
-            tasks = taskRepository.findAll(sort);
-        else {
-            tasks = taskRepository.findByCategoryNameIgnoreCase(
-                categories.stream().map((c) -> c.toLowerCase()).toList(), sort);
-        }
-        
-        return tasks.stream().map((t) -> t.createResponse()).toList();
+        return taskAccessHandler.findAll(categories, sort);
     }    
     
     public ConditionalObject<Task> findById(Long id) {
-        Optional<Task> result = taskRepository.findById(id);
+        Optional<Task> result = taskAccessHandler.findById(id);
         if (result.isEmpty())
             return new ConditionalObject<>(HttpStatus.NOT_FOUND, "Task with ID [" + id + "] does not exist.");
 
@@ -47,7 +39,7 @@ public class TaskService {
     }
 
     public ConditionalObject<TaskResponse> create(CreateTaskDto data) { 
-        ConditionalObject<Category> result = categoryService.findById(data.categoryId());
+        ConditionalObject<Category> result = categoryAccessHandler.findById(data.categoryId());
         if (result.hasError())
             return new ConditionalObject<>(result);
  
@@ -56,7 +48,7 @@ public class TaskService {
         task.setDueDate(data.dueDate());
         task.setIsArchived(false);
         task.setCategory(result.getObject());
-        taskRepository.saveAndFlush(task);
+        taskAccessHandler.saveAndFlush(task);
         return new ConditionalObject<>(task.createResponse());
     }
     
@@ -68,7 +60,7 @@ public class TaskService {
         Task task = resultTask.getObject();
         if (data.categoryId() != null)
         {
-            ConditionalObject<Category> resultCategory = categoryService.findById(id);
+            ConditionalObject<Category> resultCategory = categoryAccessHandler.findById(id);
             if (resultCategory.hasError())
                 return new ConditionalObject<>(resultCategory);
             task.setCategory(resultCategory.getObject());
@@ -77,18 +69,20 @@ public class TaskService {
         if (data.name() != null)
             task.setName(data.name());
         if (data.dueDate() != null)
-            task.setDueDate(data.dueDate());
+            task.setDueDate(data.dueDate()); 
        
-        taskRepository.save(task);
+        taskAccessHandler.saveAndFlush(task);
         return new ConditionalObject<>(task.createResponse());
     }
 
-    public ConditionalObject<Void> delete(Long id) {
+    public ConditionalObject<TaskResponse> delete(Long id) {
         ConditionalObject<Task> result = findById(id);
         if (result.hasError())
             return new ConditionalObject<>(result);
         
-        taskRepository.delete(result.getObject()); 
-        return new ConditionalObject<>(null);
+        Task task = result.getObject();
+        task.setIsArchived(true);
+        taskAccessHandler.saveAndFlush(task);
+        return new ConditionalObject<>(task.createResponse());
     }
 }

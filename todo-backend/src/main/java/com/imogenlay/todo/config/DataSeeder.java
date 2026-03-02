@@ -54,7 +54,7 @@ public class DataSeeder implements CommandLineRunner {
 
         System.out.println("SEED NEW TASKS");
         if (taskFactory.repoEmpty()) {
-            for (int i = 0; i < 80; i++) 
+            for (int i = 0; i < 15; i++) 
                 taskFactory.createAndPersist();
         }
     }

@@ -26,7 +26,7 @@ public class TaskFactory {
     public boolean repoEmpty() {
         return taskRepository.count() == 0;
     }
-    
+
     public Task create(TaskFactoryOptions options) {
         Task task = new Task();
         Faker faker = new Faker();
@@ -65,7 +65,7 @@ public class TaskFactory {
     private LocalDate generateDate() {
         return LocalDate.ofYearDay(
             2025 + (int)(Math.random() * 3),
-            (int)(Math.random() * 365));
+            (int)(Math.random() * 363 + 1));
     }
 
     private Category getRandomCategory() {
@@ -73,9 +73,7 @@ public class TaskFactory {
         return categories.get((int) (Math.random() * categories.size()));
     }
 
-    /*@Override
     public void clear() {
-        this.categoryRepository.deleteAll(); 
-    }*/
-}
-
+        this.taskRepository.deleteAll(); 
+    }
+} 

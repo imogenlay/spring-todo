@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 public class Category extends BaseTimestampedEntity {
     
     private String name;
-    private Integer hue;
+    private Integer hue = 0;
 
     public Category() {}
     

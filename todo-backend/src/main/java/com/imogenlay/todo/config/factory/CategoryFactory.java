@@ -42,8 +42,7 @@ public class CategoryFactory {
         return categoryRepository.save(category);
     }
 
-    /*@Override
     public void clear() {
         this.categoryRepository.deleteAll(); 
-    }*/
+    }
 }
