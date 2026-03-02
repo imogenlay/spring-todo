@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.imogenlay.todo.category.entity.Category;
-import com.imogenlay.todo.common.error.ConditionalObject;
+import com.imogenlay.todo.common.ConditionalObject;
 
 @Component
 public class CategoryAccessHandler {

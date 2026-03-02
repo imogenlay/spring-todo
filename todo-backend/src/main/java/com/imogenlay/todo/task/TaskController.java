@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
- 
+
+import com.imogenlay.todo.common.ConditionalObject;
 import com.imogenlay.todo.common.SortOrder;
-import com.imogenlay.todo.common.error.ConditionalObject;
 import com.imogenlay.todo.task.dtos.CreateTaskDto;
 import com.imogenlay.todo.task.dtos.TaskQueryParams;
 import com.imogenlay.todo.task.dtos.TaskResponse;

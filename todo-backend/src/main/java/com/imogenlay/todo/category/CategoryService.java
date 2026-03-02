@@ -10,7 +10,7 @@ import com.imogenlay.todo.category.dtos.CategoryResponse;
 import com.imogenlay.todo.category.dtos.CreateCategoryDto;
 import com.imogenlay.todo.category.dtos.UpdateCategoryDto;
 import com.imogenlay.todo.category.entity.Category;
-import com.imogenlay.todo.common.error.ConditionalObject;
+import com.imogenlay.todo.common.ConditionalObject;
 import com.imogenlay.todo.task.TaskAccessHandler;
 import com.imogenlay.todo.task.dtos.TaskResponse;
 

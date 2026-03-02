@@ -18,8 +18,8 @@ import com.imogenlay.todo.category.dtos.CategoryResponse;
 import com.imogenlay.todo.category.dtos.CreateCategoryDto;
 import com.imogenlay.todo.category.dtos.UpdateCategoryDto;
 import com.imogenlay.todo.category.entity.Category;
+import com.imogenlay.todo.common.ConditionalObject;
 import com.imogenlay.todo.common.SortOrder;
-import com.imogenlay.todo.common.error.ConditionalObject;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PutMapping;

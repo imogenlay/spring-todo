@@ -1,7 +1,10 @@
-package com.imogenlay.todo.common.error;
+package com.imogenlay.todo.common;
  
 import org.springframework.http.HttpStatus;
-import com.imogenlay.todo.common.Tuple;
+
+import com.imogenlay.todo.common.error.BadRequestException;
+import com.imogenlay.todo.common.error.InternalServerException;
+import com.imogenlay.todo.common.error.NotFoundException;
 
 public class ConditionalObject<T> {
     

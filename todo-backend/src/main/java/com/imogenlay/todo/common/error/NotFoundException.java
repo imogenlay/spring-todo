@@ -2,9 +2,6 @@ package com.imogenlay.todo.common.error;
 
 import org.springframework.http.HttpStatus;
 
-public class NotFoundException extends RuntimeException {
-    private final HttpStatus status = HttpStatus.NOT_FOUND;
-
-    public NotFoundException(String message) { super(message); }
-    public HttpStatus getStatus() { return status; }
+public class NotFoundException extends ExceptionBase {
+    public NotFoundException(String message) { super(HttpStatus.NOT_FOUND, message); }
 }

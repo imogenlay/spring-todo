@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.imogenlay.todo.category.CategoryAccessHandler; 
 import com.imogenlay.todo.category.entity.Category;
-import com.imogenlay.todo.common.error.ConditionalObject;
+import com.imogenlay.todo.common.ConditionalObject;
 import com.imogenlay.todo.task.dtos.CreateTaskDto;
 import com.imogenlay.todo.task.dtos.TaskResponse;
 import com.imogenlay.todo.task.dtos.UpdateTaskDto;
